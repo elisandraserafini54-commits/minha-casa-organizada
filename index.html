@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#45634a">
+  <meta name="description" content="Organize sua casa com pequenas tarefas diárias, semanais e rotativas.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+  <title>Minha Casa Organizada</title>
+</head>
+<body>
+  <header class="top">
+    <div class="brand-mark" aria-hidden="true">⌂</div>
+    <div>
+      <p class="eyebrow">UM PASSO DE CADA VEZ</p>
+      <h1>Minha Casa Organizada</h1>
+      <p class="subtitle">Uma casa cuidada, uma rotina mais leve.</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <p class="eyebrow">SUA META DE HOJE</p>
+        <h2>30 minutos já fazem diferença.</h2>
+        <p id="today-label" class="muted"></p>
+      </div>
+      <div class="progress-circle" id="hero-progress" aria-label="Progresso diário">
+        <span id="hero-percent">0%</span>
+      </div>
+    </section>
+
+    <nav class="tabs" aria-label="Seções do aplicativo">
+      <button class="tab active" data-view="hoje">Hoje</button>
+      <button class="tab" data-view="semanal">Semanal</button>
+      <button class="tab" data-view="rotativa">Rotativa</button>
+      <button class="tab" data-view="comodos">Cômodos</button>
+      <button class="tab" data-view="historico">Histórico</button>
+    </nav>
+
+    <section id="view-hoje" class="view">
+      <div class="section-heading">
+        <div><p class="eyebrow">ROTINA DIÁRIA</p><h2>Pequenos cuidados</h2></div>
+        <span class="pill" id="daily-count">0/0 feitas</span>
+      </div>
+      <div class="progress-track"><div id="daily-bar" class="progress-fill"></div></div>
+      <div id="daily-list" class="task-list"></div>
+      <p class="tip">Dica: adapte os tempos ao tamanho da sua casa. Não precisa fazer tudo perfeitamente.</p>
+    </section>
+
+    <section id="view-semanal" class="view hidden">
+      <div class="section-heading"><div><p class="eyebrow">PLANO DA SEMANA</p><h2>Uma tarefa de cada vez</h2></div></div>
+      <div id="day-picker" class="day-picker"></div>
+      <div id="weekly-list" class="task-list"></div>
+      <button class="primary full" id="add-weekly">+ Adicionar tarefa para este dia</button>
+    </section>
+
+    <section id="view-rotativa" class="view hidden">
+      <div class="section-heading"><div><p class="eyebrow">QUANDO SOBRAR TEMPO</p><h2>Limpeza rotativa</h2></div></div>
+      <p class="muted">Escolha uma ou duas tarefas extras por vez. Elas não precisam ser feitas todas no mesmo dia.</p>
+      <div id="rotating-list" class="task-list"></div>
+      <button class="primary full" id="add-rotating">+ Adicionar tarefa rotativa</button>
+    </section>
+
+    <section id="view-comodos" class="view hidden">
+      <div class="section-heading"><div><p class="eyebrow">SUA CASA, DO SEU JEITO</p><h2>Cômodos e tarefas</h2></div></div>
+      <p class="muted">Escolha um cômodo para ver e personalizar suas tarefas.</p>
+      <div id="room-picker" class="room-grid"></div>
+      <div id="room-tasks"></div>
+      <button class="primary full" id="add-room-task">+ Adicionar tarefa ao cômodo</button>
+    </section>
+
+    <section id="view-historico" class="view hidden">
+      <div class="section-heading"><div><p class="eyebrow">SEU PROGRESSO</p><h2>Histórico de cuidados</h2></div></div>
+      <div class="stats-grid">
+        <article class="stat-card"><span class="muted">Dias com tarefas</span><strong id="history-days">0</strong></article>
+        <article class="stat-card"><span class="muted">Tarefas concluídas</span><strong id="history-tasks">0</strong></article>
+      </div>
+      <div id="history-list" class="history-list"></div>
+      <button class="secondary full" id="export-data">Exportar cópia dos dados</button>
+      <p class="tip">Os dados ficam neste aparelho e neste navegador. Exporte uma cópia antes de limpar os dados do navegador ou trocar de celular.</p>
+    </section>
+
+    <section class="install-card" id="install-card">
+      <div><strong>Instale no seu celular</strong><p class="muted">Adicione à tela inicial para abrir como um aplicativo.</p></div>
+      <button id="install-button" class="secondary">Instalar</button>
+      <p id="install-help" class="muted small hidden">No Chrome, toque em ⋮ e escolha “Instalar app” ou “Adicionar à tela inicial”.</p>
+    </section>
+  </main>
+
+  <footer><span>Feito para uma rotina mais leve ♡</span><button id="reset-day" class="text-button">Desmarcar hoje</button></footer>
+
+  <dialog id="task-dialog">
+    <form method="dialog" id="task-form">
+      <div class="dialog-head"><h2 id="dialog-title">Nova tarefa</h2><button type="button" id="close-dialog" class="icon-button" aria-label="Fechar">×</button></div>
+      <label for="task-name">Nome da tarefa</label>
+      <input id="task-name" name="name" required maxlength="100" placeholder="Ex.: Limpar a pia">
+      <label for="task-minutes">Tempo estimado (minutos)</label>
+      <input id="task-minutes" name="minutes" type="number" min="1" max="240" value="10" required>
+      <label for="task-room">Cômodo</label>
+      <select id="task-room" name="room"></select>
+      <label for="task-type">Lista</label>
+      <select id="task-type" name="type">
+        <option value="daily">Diária</option><option value="weekly">Semanal</option><option value="rotating">Rotativa</option><option value="room">Do cômodo</option>
+      </select>
+      <label for="task-day" id="day-label" class="hidden">Dia da semana</label>
+      <select id="task-day" name="day" class="hidden"></select>
+      <input id="task-id" name="id" type="hidden">
+      <div class="dialog-actions"><button type="button" id="delete-task" class="danger hidden">Excluir</button><span></span><button type="button" id="cancel-dialog" class="secondary">Cancelar</button><button type="submit" class="primary">Salvar</button></div>
+    </form>
+  </dialog>
+  <input type="file" id="import-file" accept="application/json,.json" class="hidden">
+  <script src="app.js"></script>
+</body>
+</html>
